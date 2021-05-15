@@ -29,6 +29,23 @@ void initialize() {
 
 //	pros::lcd::register_btn1_cb(on_center_button);
 
+//drive motors
+pros::Motor lFDrive(10);
+lFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+pros::Motor lRDrive(20);
+lRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+pros::Motor rFDrive(1);
+rFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+pros::Motor rRDrive(14);
+rRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+
+//lift motors
+pros::Motor lLift(7, true);
+pros::Motor rLift(5);
+
+//intake motors
+pros::Motor lIntake(9, MOTOR_GEARSET_6, true);
+pros::Motor rIntake(2, MOTOR_GEARSET_6);
 
 }
 
@@ -61,7 +78,9 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -79,23 +98,7 @@ void autonomous() {}
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
-	//drive motors
-	pros::Motor lFDrive(10);
-	lFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
-	pros::Motor lRDrive(20);
-	lRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
-	pros::Motor rFDrive(1);
-	rFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
-	pros::Motor rRDrive(14);
-	rRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
 
-	//lift motors
-	pros::Motor lLift(7, true);
-	pros::Motor rLift(5);
-
-	//intake motors
-	pros::Motor lIntake(9, MOTOR_GEARSET_6, true);
-	pros::Motor rIntake(2, MOTOR_GEARSET_6);
 
 	int liftSpeed = 200; //rpm
 	int intakeSpeed = 500; //rpm
