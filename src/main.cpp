@@ -84,7 +84,7 @@ void autonomous() {
 	pros::Motor lIntake(9, MOTOR_GEARSET_6, true);
 	pros::Motor rIntake(2, MOTOR_GEARSET_6);
 
-	int liftSpeed = 150;
+	int liftSpeed = 200;
 	int intakeSpeed = 500;
 
 	std::shared_ptr<ChassisController> chassis =
@@ -92,24 +92,24 @@ void autonomous() {
 			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
 			.withDimensions(AbstractMotor::gearset::green, {{4_in, 14.8_in}, imev5GreenTPR})
 			.withOdometry()
-			.withMaxVelocity(100)
+			.withMaxVelocity(150)
+			.withMaxVoltage(4000)
 			.buildOdometry();
 
 		chassis->moveDistance(12_in);
 
-		chassis->turnAngle(90_deg);
+		chassis->turnAngle(105_deg);
 
-		chassis->moveDistance(24_in);
+		chassis->moveDistanceAsync(30_in);
 
-		chassis->turnAngle(35_deg);
+	//	chassis->turnAngle(35_deg);
+		pros::delay(1500);
 
 		lLift.move_velocity(liftSpeed);
 		rLift.move_velocity(liftSpeed);
 		//move intake in
 		lIntake.move_velocity(intakeSpeed);
 		rIntake.move_velocity(intakeSpeed);
-
-		chassis->moveDistance(8_in);
 
 		chassis->waitUntilSettled();
 
@@ -121,13 +121,9 @@ void autonomous() {
 		lIntake.move_velocity(0);
 		rIntake.move_velocity(0);
 
-		chassis->moveDistance(-16_in);
+		chassis->moveDistance(-56_in);
 
-		chassis->turnAngle(145_deg);
-
-		chassis->moveDistance(40_in);
-
-		chassis->turnAngle(-90_deg);
+		chassis->turnAngle(75_deg);
 
 		lLift.move_velocity(liftSpeed);
 		rLift.move_velocity(liftSpeed);
@@ -148,7 +144,15 @@ void autonomous() {
 		rIntake.move_velocity(0);
 
 
-		chassis->turnAngle(115_deg);
+		chassis->turnAngle(85_deg);
+
+		lLift.move_velocity(liftSpeed);
+		rLift.move_velocity(liftSpeed);
+		//move intake in
+		lIntake.move_velocity(-intakeSpeed);
+		rIntake.move_velocity(-intakeSpeed);
+
+		chassis->moveDistance(44_in);
 
 }
 
