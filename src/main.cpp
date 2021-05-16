@@ -17,6 +17,7 @@ void on_center_button() {
 	}
 }*/
 
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -28,7 +29,6 @@ void initialize() {
 //	pros::lcd::set_text(1, "Hello PROS User!");
 
 //	pros::lcd::register_btn1_cb(on_center_button);
-
 
 }
 
@@ -77,6 +77,8 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+
+  //Initialize controller
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 	//drive motors
