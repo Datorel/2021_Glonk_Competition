@@ -95,14 +95,28 @@ void autonomous() {
 			.withMaxVelocity(100)
 			.buildOdometry();
 
-		chassis->moveDistance(12_in);
+	std:: shared_ptr<AsyncMotionProfileController> profileController =
+		AsyncMotionProfileControllerBuilder()
+			.withLimits({
+				1.0,
+				2.0,
+				10.0
+			})
+			.withOutput(chassis)
+			.buildMotionProfileController();
 
-		chassis->turnAngle(90_deg);
+			profileController->generatePath(
+				{{0_in, 0_in, 0_deg}, {6_in, 30_in, 120_deg}}, "A");
+				profileController->setTarget("A");
+				profileController->waitUntilSettled();
+			)
+/*
+		while(chassis->getSensorVals()[1] < 300) {
+					chassis->driveVector(100, 15)
+		}
 
-		chassis->moveDistance(24_in);
-
-		chassis->turnAngle(35_deg);
-
+		chassis->stop();
+*/
 		lLift.move_velocity(liftSpeed);
 		rLift.move_velocity(liftSpeed);
 		//move intake in
