@@ -106,11 +106,12 @@ void autonomous() {
 			.buildMotionProfileController();
 
 			profileController->generatePath(
-				{{0_in, 0_in, 0_deg}, {6_in, 30_in, 120_deg}}, "A");
+				{{0_in, 0_in, 0_deg}, {30_in, 30_in, 100_deg}}, "A");
 				profileController->setTarget("A");
 				profileController->waitUntilSettled();
-			)
+
 /*
+
 		while(chassis->getSensorVals()[1] < 300) {
 					chassis->driveVector(100, 15)
 		}
