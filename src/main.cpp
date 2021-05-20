@@ -103,7 +103,7 @@ void autonomous() {
 		chassis->moveDistanceAsync(30_in);
 
 	//	chassis->turnAngle(35_deg);
-		pros::delay(1500);
+		pros::delay(1000);
 
 		lLift.move_velocity(liftSpeed);
 		rLift.move_velocity(liftSpeed);
