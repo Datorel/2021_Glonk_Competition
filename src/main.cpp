@@ -92,7 +92,7 @@ void autonomous() {
 			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
 			.withDimensions(AbstractMotor::gearset::green, {{4_in, 14.8_in}, imev5GreenTPR})
 			.withOdometry()
-			.withMaxVelocity(150)
+			.withMaxVelocity(100)
 			.withMaxVoltage(4000)
 			.buildOdometry();
 
@@ -100,7 +100,7 @@ void autonomous() {
 
 		chassis->turnAngle(105_deg);
 
-		chassis->moveDistanceAsync(30_in);
+		chassis->moveDistanceAsync(31_in);
 
 	//	chassis->turnAngle(35_deg);
 		pros::delay(1000);
@@ -131,11 +131,13 @@ void autonomous() {
 		lIntake.move_velocity(intakeSpeed);
 		rIntake.move_velocity(intakeSpeed);
 
-		chassis->moveDistance(5_in);
+		chassis->moveDistance(7_in);
 
-		pros::delay(500);
+		pros::delay(700);
 
-		chassis->moveDistance(-6_in);
+		chassis->setMaxVelocity(200);
+
+		chassis->moveDistance(-11_in);
 
 		lLift.move_velocity(0);
 		rLift.move_velocity(0);
@@ -144,7 +146,7 @@ void autonomous() {
 		rIntake.move_velocity(0);
 
 
-		chassis->turnAngle(85_deg);
+		chassis->turnAngle(65_deg);
 
 		lLift.move_velocity(liftSpeed);
 		rLift.move_velocity(liftSpeed);
@@ -152,7 +154,8 @@ void autonomous() {
 		lIntake.move_velocity(-intakeSpeed);
 		rIntake.move_velocity(-intakeSpeed);
 
-		chassis->moveDistance(44_in);
+
+		chassis->moveDistance(54_in);
 
 }
 
