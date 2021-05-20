@@ -87,6 +87,7 @@ void autonomous() {
 	int liftSpeed = 200;
 	int intakeSpeed = 500;
 
+	std::string side = "left"; //right or left
 	std::shared_ptr<ChassisController> chassis =
 		ChassisControllerBuilder()
 			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
@@ -96,67 +97,133 @@ void autonomous() {
 			.withMaxVoltage(4000)
 			.buildOdometry();
 
-		chassis->moveDistance(12_in);
+		if (side == "right") {
+			chassis->moveDistance(12_in);
 
-		chassis->turnAngle(105_deg);
+			chassis->turnAngle(105_deg);
 
-		chassis->moveDistanceAsync(31_in);
+			chassis->moveDistanceAsync(31_in);
 
-	//	chassis->turnAngle(35_deg);
-		pros::delay(1000);
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
 
-		lLift.move_velocity(liftSpeed);
-		rLift.move_velocity(liftSpeed);
-		//move intake in
-		lIntake.move_velocity(intakeSpeed);
-		rIntake.move_velocity(intakeSpeed);
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
 
-		chassis->waitUntilSettled();
+			chassis->waitUntilSettled();
 
-		pros::delay(700);
+			pros::delay(700);
 
-		lLift.move_velocity(0);
-		rLift.move_velocity(0);
-		//move intake in
-		lIntake.move_velocity(0);
-		rIntake.move_velocity(0);
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
 
-		chassis->moveDistance(-56_in);
+			chassis->moveDistance(-56_in);
 
-		chassis->turnAngle(75_deg);
+			chassis->turnAngle(73_deg);
 
-		lLift.move_velocity(liftSpeed);
-		rLift.move_velocity(liftSpeed);
-		//move intake in
-		lIntake.move_velocity(intakeSpeed);
-		rIntake.move_velocity(intakeSpeed);
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
 
-		chassis->moveDistance(7_in);
+			chassis->moveDistance(7_in);
 
-		pros::delay(700);
+			pros::delay(700);
 
-		chassis->setMaxVelocity(200);
+			chassis->setMaxVelocity(200);
 
-		chassis->moveDistance(-11_in);
+			chassis->moveDistance(-15_in);
 
-		lLift.move_velocity(0);
-		rLift.move_velocity(0);
-		//move intake in
-		lIntake.move_velocity(0);
-		rIntake.move_velocity(0);
-
-
-		chassis->turnAngle(65_deg);
-
-		lLift.move_velocity(liftSpeed);
-		rLift.move_velocity(liftSpeed);
-		//move intake in
-		lIntake.move_velocity(-intakeSpeed);
-		rIntake.move_velocity(-intakeSpeed);
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
 
 
-		chassis->moveDistance(54_in);
+			chassis->turnAngle(70_deg);
 
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
+
+		else if (side == "left") {
+
+			chassis->setTurnsMirrored(true);
+			chassis->moveDistance(12_in);
+
+			chassis->turnAngle(QAngle idegTarget)(105_deg);
+
+			chassis->moveDistanceAsync(31_in);
+
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+			pros::delay(700);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->moveDistance(-56_in);
+
+			chassis->turnAngle(73_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->moveDistance(7_in);
+
+			pros::delay(700);
+
+			chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-15_in);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+
+			chassis->turnAngle(70_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
 }
 
 /**
