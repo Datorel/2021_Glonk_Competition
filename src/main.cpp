@@ -19,12 +19,16 @@ void on_center_button() {
 
 using namespace okapi;
 
+//Initialize controller
+pros::Controller master(pros::E_CONTROLLER_MASTER);
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
 void initialize() {
 //	pros::lcd::initialize();
 //	pros::lcd::set_text(1, "Hello PROS User!");
@@ -38,7 +42,64 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+std::string waitForPress() { //only works for arrow buttons
+	while(!master.get_digital(DIGITAL_UP) && !master.get_digital(DIGITAL_RIGHT) && !master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_LEFT)) {
+    pros::delay(10);
+  }
+
+  if (master.get_digital(DIGITAL_UP)) {
+    return "up";
+  }
+  else if (master.get_digital(DIGITAL_RIGHT)) {
+    return "right";
+  }
+  else if (master.get_digital(DIGITAL_DOWN)) {
+    return "down";
+  }
+  else if (master.get_digital(DIGITAL_LEFT)) {
+    return "left";
+  }
+
+}
+void waitForRelease() {
+  while(master.get_digital(DIGITAL_UP) || master.get_digital(DIGITAL_RIGHT) || master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_LEFT)) {
+    pros::delay(10);
+  }
+}
+
+void disabled() {
+  std::string pressed;
+  int code = 0;
+  while (!master.get_digital(DIGITAL_A)) {
+    //insert lambda of display stuff here
+    switch(code) { //cycle through menu options. Numbers increase clockwise starting at top left
+      case 0:
+        pressed = waitForPress();
+        if (pressed == "right") {code++;}
+        if (pressed == "down") {code = 3;}
+        waitForRelease();
+        break;
+      case 1:
+        pressed = waitForPress();
+        if (pressed == "down") {code++;}
+        if (pressed == "left") {code--;}
+        waitForRelease();
+        break;
+      case 2:
+        pressed = waitForPress();
+        if (pressed == "left") {code++;}
+        if (pressed == "up") {code--;}
+        waitForRelease();
+        break;
+      case 3:
+        pressed = waitForPress();
+        if (pressed == "up") {code = 0;}
+        if (pressed == "right") {code--;}
+        waitForRelease();
+        break;
+    }
+  }
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -87,7 +148,7 @@ void autonomous() {
 	int liftSpeed = 200;
 	int intakeSpeed = 500;
 
-	std::string side = "left"; //right or left
+	std::string side = "right"; //right or left
 	std::shared_ptr<ChassisController> chassis =
 		ChassisControllerBuilder()
 			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
@@ -165,7 +226,7 @@ void autonomous() {
 			chassis->setTurnsMirrored(true);
 			chassis->moveDistance(12_in);
 
-			chassis->turnAngle(QAngle idegTarget)(105_deg);
+			chassis->turnAngle(105_deg);
 
 			chassis->moveDistanceAsync(31_in);
 
@@ -212,8 +273,7 @@ void autonomous() {
 			lIntake.move_velocity(0);
 			rIntake.move_velocity(0);
 
-
-			chassis->turnAngle(70_deg);
+			chassis->turnAngle(65_deg);
 
 			lLift.move_velocity(liftSpeed);
 			rLift.move_velocity(liftSpeed);
