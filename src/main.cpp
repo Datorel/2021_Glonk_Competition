@@ -43,8 +43,8 @@ void initialize() {
  * the robot is enabled, this task will exit.
  */
 std::string waitForPress() { //only works for arrow buttons
-	while(!master.get_digital(DIGITAL_UP) && !master.get_digital(DIGITAL_RIGHT) && !master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
+	while(!(master.get_digital(DIGITAL_UP)) && !(master.get_digital(DIGITAL_RIGHT)) && !(master.get_digital(DIGITAL_DOWN)) && !(master.get_digital(DIGITAL_LEFT))) {
+    pros::delay(50);
   }
 
   if (master.get_digital(DIGITAL_UP)) {
@@ -59,46 +59,67 @@ std::string waitForPress() { //only works for arrow buttons
   else if (master.get_digital(DIGITAL_LEFT)) {
     return "left";
   }
-
+	return " ";
 }
 void waitForRelease() {
   while(master.get_digital(DIGITAL_UP) || master.get_digital(DIGITAL_RIGHT) || master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
+    pros::delay(50);
   }
 }
 
 void disabled() {
   std::string pressed;
   int code = 0;
-  while (!master.get_digital(DIGITAL_A)) {
-    //insert lambda of display stuff here
+  while (master.get_digital(DIGITAL_A) == false) {
+
+		master.set_text(1,0,"RED");
+		pros::delay(50);
+		master.set_text(0,3,"L");
+		pros::delay(50);
+		master.set_text(2,3,"R");
+		pros::delay(50);
+		master.set_text(1,10,"BLUE");
+		pros::delay(50);
+		master.set_text(0,9,"R");
+		pros::delay(50);
+		master.set_text(2,9,"L");
+		pros::delay(50);
+
     switch(code) { //cycle through menu options. Numbers increase clockwise starting at top left
       case 0:
+				master.set_text(0,4,"<-");
         pressed = waitForPress();
         if (pressed == "right") {code++;}
         if (pressed == "down") {code = 3;}
         waitForRelease();
         break;
       case 1:
+				master.set_text(0,7,"->");
         pressed = waitForPress();
         if (pressed == "down") {code++;}
         if (pressed == "left") {code--;}
         waitForRelease();
         break;
       case 2:
+				master.set_text(2,7,"->");
         pressed = waitForPress();
         if (pressed == "left") {code++;}
         if (pressed == "up") {code--;}
         waitForRelease();
         break;
       case 3:
+				master.set_text(2,4,"<-");
         pressed = waitForPress();
         if (pressed == "up") {code = 0;}
         if (pressed == "right") {code--;}
         waitForRelease();
         break;
     }
+		pros::delay(100);
   }
+	master.clear();
+	pros::delay(50);
+	master.set_text(0,0,"done");
 }
 
 /**
@@ -324,7 +345,11 @@ void opcontrol() {
 
 	int liftSpeed = 200; //rpm
 	int intakeSpeed = 500; //rpm
+	master.clear();
+
 	while (true) {
+
+
 
 	/*	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
