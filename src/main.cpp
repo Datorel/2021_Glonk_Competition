@@ -19,8 +19,7 @@ void on_center_button() {
 
 using namespace okapi;
 
-//Initialize controller
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+//Initialize controlle
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -42,63 +41,9 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-std::string waitForPress() { //only works for arrow buttons
-	while(!master.get_digital(DIGITAL_UP) && !master.get_digital(DIGITAL_RIGHT) && !master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
-  }
-
-  if (master.get_digital(DIGITAL_UP)) {
-    return "up";
-  }
-  else if (master.get_digital(DIGITAL_RIGHT)) {
-    return "right";
-  }
-  else if (master.get_digital(DIGITAL_DOWN)) {
-    return "down";
-  }
-  else if (master.get_digital(DIGITAL_LEFT)) {
-    return "left";
-  }
-
-}
-void waitForRelease() {
-  while(master.get_digital(DIGITAL_UP) || master.get_digital(DIGITAL_RIGHT) || master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
-  }
-}
 
 void disabled() {
-  std::string pressed;
-  int code = 0;
-  while (!master.get_digital(DIGITAL_A)) {
-    //insert lambda of display stuff here
-    switch(code) { //cycle through menu options. Numbers increase clockwise starting at top left
-      case 0:
-        pressed = waitForPress();
-        if (pressed == "right") {code++;}
-        if (pressed == "down") {code = 3;}
-        waitForRelease();
-        break;
-      case 1:
-        pressed = waitForPress();
-        if (pressed == "down") {code++;}
-        if (pressed == "left") {code--;}
-        waitForRelease();
-        break;
-      case 2:
-        pressed = waitForPress();
-        if (pressed == "left") {code++;}
-        if (pressed == "up") {code--;}
-        waitForRelease();
-        break;
-      case 3:
-        pressed = waitForPress();
-        if (pressed == "up") {code = 0;}
-        if (pressed == "right") {code--;}
-        waitForRelease();
-        break;
-    }
-  }
+  
 }
 
 /**
@@ -325,12 +270,13 @@ void opcontrol() {
 	int liftSpeed = 200; //rpm
 	int intakeSpeed = 500; //rpm
 	while (true) {
-
+    master.clear();
+    master.set_text(0,0,"1234");
 	/*	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 										 */
-
+  
 		int leftDrive = master.get_analog(ANALOG_LEFT_Y);
 		int rightDrive = master.get_analog(ANALOG_RIGHT_Y);
 
@@ -370,6 +316,6 @@ void opcontrol() {
 		}
 
 
-		pros::delay(10);
+		pros::delay(50);
 	}
 }
