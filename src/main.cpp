@@ -44,7 +44,11 @@ void initialize() {
  */
 
 void disabled() {
+<<<<<<< HEAD
   pros::delay(100);
+=======
+  
+>>>>>>> 71f22368a51c99316f2634878301d64e19fec3ba
 }
 
 /**
@@ -401,14 +405,19 @@ void opcontrol() {
 	int liftSpeed = 200; //rpm
 	int intakeSpeed = 500; //rpm
 	while (true) {
+<<<<<<< HEAD
 
 
 
+=======
+    master.clear();
+    master.set_text(0,0,"1234");
+>>>>>>> 71f22368a51c99316f2634878301d64e19fec3ba
 	/*	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 										 */
-
+  
 		int leftDrive = master.get_analog(ANALOG_LEFT_Y);
 		int rightDrive = master.get_analog(ANALOG_RIGHT_Y);
 
