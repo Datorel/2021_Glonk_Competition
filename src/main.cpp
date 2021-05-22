@@ -19,8 +19,7 @@ void on_center_button() {
 
 using namespace okapi;
 
-//Initialize controller
-pros::Controller master(pros::E_CONTROLLER_MASTER);
+//Initialize controlle
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -30,6 +29,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  */
 
 void initialize() {
+  pros::delay(100);
 //	pros::lcd::initialize();
 //	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -42,63 +42,9 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-std::string waitForPress() { //only works for arrow buttons
-	while(!master.get_digital(DIGITAL_UP) && !master.get_digital(DIGITAL_RIGHT) && !master.get_digital(DIGITAL_DOWN) && !master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
-  }
-
-  if (master.get_digital(DIGITAL_UP)) {
-    return "up";
-  }
-  else if (master.get_digital(DIGITAL_RIGHT)) {
-    return "right";
-  }
-  else if (master.get_digital(DIGITAL_DOWN)) {
-    return "down";
-  }
-  else if (master.get_digital(DIGITAL_LEFT)) {
-    return "left";
-  }
-
-}
-void waitForRelease() {
-  while(master.get_digital(DIGITAL_UP) || master.get_digital(DIGITAL_RIGHT) || master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_LEFT)) {
-    pros::delay(10);
-  }
-}
 
 void disabled() {
-  std::string pressed;
-  int code = 0;
-  while (!master.get_digital(DIGITAL_A)) {
-    //insert lambda of display stuff here
-    switch(code) { //cycle through menu options. Numbers increase clockwise starting at top left
-      case 0:
-        pressed = waitForPress();
-        if (pressed == "right") {code++;}
-        if (pressed == "down") {code = 3;}
-        waitForRelease();
-        break;
-      case 1:
-        pressed = waitForPress();
-        if (pressed == "down") {code++;}
-        if (pressed == "left") {code--;}
-        waitForRelease();
-        break;
-      case 2:
-        pressed = waitForPress();
-        if (pressed == "left") {code++;}
-        if (pressed == "up") {code--;}
-        waitForRelease();
-        break;
-      case 3:
-        pressed = waitForPress();
-        if (pressed == "up") {code = 0;}
-        if (pressed == "right") {code--;}
-        waitForRelease();
-        break;
-    }
-  }
+  pros::delay(100);
 }
 
 /**
@@ -110,7 +56,9 @@ void disabled() {
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+  pros::delay(100);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -148,7 +96,7 @@ void autonomous() {
 	int liftSpeed = 200;
 	int intakeSpeed = 500;
 
-	std::string side = "right"; //right or left
+	std::string side = "experimental"; //right or left
 	std::shared_ptr<ChassisController> chassis =
 		ChassisControllerBuilder()
 			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
@@ -157,7 +105,7 @@ void autonomous() {
 			.withMaxVelocity(100)
 			.withMaxVoltage(4000)
 			.buildOdometry();
-
+      pros::delay(50);
 		if (side == "right") {
 			chassis->moveDistance(12_in);
 
@@ -284,6 +232,134 @@ void autonomous() {
 
 			chassis->moveDistance(54_in);
 		}
+    else if (side == "rightBlue") {
+			chassis->moveDistance(12_in);
+
+			chassis->turnAngle(105_deg);
+
+			chassis->moveDistanceAsync(31_in);
+
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+			pros::delay(700);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->moveDistance(-56_in);
+
+			chassis->turnAngle(70_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->moveDistance(7_in);
+
+			pros::delay(700);
+
+			chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-10_in);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+
+			chassis->turnAngle(65_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
+
+    else if (side == "experimental") {
+
+      chassis->setMaxVelocity(80);
+			chassis->moveDistanceAsync(2_in);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+      chassis->moveDistanceAsync(-52_in);
+
+			pros::delay(600);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+      chassis->waitUntilSettled();
+
+			chassis->turnAngle(77_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+      chassis->setMaxVelocity(100);
+			chassis->moveDistance(6.5_in);
+      chassis->setMaxVelocity(100);
+
+			pros::delay(400);
+
+			//chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-35.5_in);
+
+      lFDrive.move_velocity(180);
+      lRDrive.move_velocity(180);
+      rFDrive.move_velocity(-40);
+      rRDrive.move_velocity(-40);
+
+      pros::delay(700);
+
+      rFDrive.move_velocity(-180);
+      rRDrive.move_velocity(-180);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+      //chassis->(-32_in);
+
+			//chassis->turnAngle(65_deg);
+
+			//chassis->moveDistance(54_in);
+		}
 }
 
 /**
@@ -325,6 +401,8 @@ void opcontrol() {
 	int liftSpeed = 200; //rpm
 	int intakeSpeed = 500; //rpm
 	while (true) {
+
+
 
 	/*	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
@@ -370,6 +448,6 @@ void opcontrol() {
 		}
 
 
-		pros::delay(10);
+		pros::delay(50);
 	}
 }
