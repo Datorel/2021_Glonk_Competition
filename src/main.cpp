@@ -17,6 +17,9 @@ void on_center_button() {
 	}
 }*/
 
+using namespace okapi;
+
+//Initialize controlle
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -24,7 +27,9 @@ void on_center_button() {
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
 void initialize() {
+  pros::delay(100);
 //	pros::lcd::initialize();
 //	pros::lcd::set_text(1, "Hello PROS User!");
 
@@ -37,7 +42,10 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+
+void disabled() {
+  pros::delay(100);
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -48,7 +56,9 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+  pros::delay(100);
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -61,7 +71,296 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	//Initialize controller
+	pros::Controller master(pros::E_CONTROLLER_MASTER);
+
+	//drive motors
+	pros::Motor lFDrive(10);
+	lFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+	pros::Motor lRDrive(20);
+	lRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+	pros::Motor rFDrive(1);
+	rFDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+	pros::Motor rRDrive(14);
+	rRDrive.set_brake_mode(MOTOR_BRAKE_HOLD);
+
+	//lift motors
+	pros::Motor lLift(7, true);
+	pros::Motor rLift(5);
+
+	//intake motors
+	pros::Motor lIntake(9, MOTOR_GEARSET_6, true);
+	pros::Motor rIntake(2, MOTOR_GEARSET_6);
+
+	int liftSpeed = 200;
+	int intakeSpeed = 500;
+
+	std::string side = "experimental"; //right or left
+	std::shared_ptr<ChassisController> chassis =
+		ChassisControllerBuilder()
+			.withMotors({10, 20}, {-1, -14}) //{lF, lR}, {rF, rR}
+			.withDimensions(AbstractMotor::gearset::green, {{4_in, 14.8_in}, imev5GreenTPR})
+			.withOdometry()
+			.withMaxVelocity(100)
+			.withMaxVoltage(4000)
+			.buildOdometry();
+      pros::delay(50);
+		if (side == "right") {
+			chassis->moveDistance(12_in);
+
+			chassis->turnAngle(105_deg);
+
+			chassis->moveDistanceAsync(31_in);
+
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+			pros::delay(700);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->moveDistance(-56_in);
+
+			chassis->turnAngle(73_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->moveDistance(7_in);
+
+			pros::delay(700);
+
+			chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-15_in);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+
+			chassis->turnAngle(70_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
+
+		else if (side == "left") {
+
+			chassis->setTurnsMirrored(true);
+			chassis->moveDistance(12_in);
+
+			chassis->turnAngle(105_deg);
+
+			chassis->moveDistanceAsync(31_in);
+
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+			pros::delay(700);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->moveDistance(-56_in);
+
+			chassis->turnAngle(73_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->moveDistance(7_in);
+
+			pros::delay(700);
+
+			chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-15_in);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->turnAngle(65_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
+    else if (side == "rightBlue") {
+			chassis->moveDistance(12_in);
+
+			chassis->turnAngle(105_deg);
+
+			chassis->moveDistanceAsync(31_in);
+
+		//	chassis->turnAngle(35_deg);
+			pros::delay(1000);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+			pros::delay(700);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+			chassis->moveDistance(-56_in);
+
+			chassis->turnAngle(70_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->moveDistance(7_in);
+
+			pros::delay(700);
+
+			chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-10_in);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+
+			chassis->turnAngle(65_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(-intakeSpeed);
+			rIntake.move_velocity(-intakeSpeed);
+
+
+			chassis->moveDistance(54_in);
+		}
+
+    else if (side == "experimental") {
+
+      chassis->setMaxVelocity(80);
+			chassis->moveDistanceAsync(2_in);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+			chassis->waitUntilSettled();
+
+      chassis->moveDistanceAsync(-52_in);
+
+			pros::delay(600);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+      chassis->waitUntilSettled();
+
+			chassis->turnAngle(77_deg);
+
+			lLift.move_velocity(liftSpeed);
+			rLift.move_velocity(liftSpeed);
+			//move intake in
+			lIntake.move_velocity(intakeSpeed);
+			rIntake.move_velocity(intakeSpeed);
+
+      chassis->setMaxVelocity(100);
+			chassis->moveDistance(6.5_in);
+      chassis->setMaxVelocity(100);
+
+			pros::delay(400);
+
+			//chassis->setMaxVelocity(200);
+
+			chassis->moveDistance(-35.5_in);
+
+      lFDrive.move_velocity(180);
+      lRDrive.move_velocity(180);
+      rFDrive.move_velocity(-40);
+      rRDrive.move_velocity(-40);
+
+      pros::delay(700);
+
+      rFDrive.move_velocity(-180);
+      rRDrive.move_velocity(-180);
+
+			lLift.move_velocity(0);
+			rLift.move_velocity(0);
+			//move intake in
+			lIntake.move_velocity(0);
+			rIntake.move_velocity(0);
+
+      //chassis->(-32_in);
+
+			//chassis->turnAngle(65_deg);
+
+			//chassis->moveDistance(54_in);
+		}
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -103,6 +402,8 @@ void opcontrol() {
 	int intakeSpeed = 500; //rpm
 	while (true) {
 
+
+
 	/*	pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
@@ -132,6 +433,9 @@ void opcontrol() {
 			rLift.move_velocity(-liftSpeed);
 			//move intake out
 			lIntake.move_velocity(-intakeSpeed);
+
+
+
 			rIntake.move_velocity(-intakeSpeed);
 		}
 		else{
@@ -144,6 +448,6 @@ void opcontrol() {
 		}
 
 
-		pros::delay(10);
+		pros::delay(50);
 	}
 }
